@@ -10,7 +10,9 @@ namespace Service
         internal static IMapper Maps()
         {
             MapperConfiguration mapperConfiguration = new MapperConfiguration(
-                conf=> { conf.CreateMap<VehicleMake, Repository.VehicleMake>().ReverseMap();});
+                conf=> { conf.CreateMap<VehicleMake, Repository.VehicleMake>().ReverseMap();
+                    conf.CreateMap<VehicleModel, Repository.VehicleModel>().ReverseMap();
+                });
             
             return mapperConfiguration.CreateMapper();
         }
