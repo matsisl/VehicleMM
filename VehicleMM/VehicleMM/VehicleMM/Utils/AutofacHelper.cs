@@ -1,12 +1,12 @@
 ﻿using Autofac;
-using Repository;
+using Service;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Service
+namespace VehicleMM.Utils
 {
-    public class AutofacContainer
+    public class AutofacHelper
     {
         internal static IContainer Build()
         {
@@ -17,7 +17,7 @@ namespace Service
 
         private static void RegisterTypes(ContainerBuilder builder)
         {
-            builder.RegisterType<DataSource>().InstancePerLifetimeScope();
+            builder.RegisterType<VehicleMakeService>().Named<VehicleMakeService>("MakeService").InstancePerLifetimeScope();
         }
     }
 }

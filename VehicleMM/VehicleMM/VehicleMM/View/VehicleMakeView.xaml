@@ -2,7 +2,11 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="VehicleMM.View.VehicleMakeView"
+             xmlns:local="clr-namespace:VehicleMM.ViewModel"
              BackgroundColor="{StaticResource PrljavaBijela}">
+    <ContentPage.BindingContext>
+        <local:VehicleMakeViewModel/>
+    </ContentPage.BindingContext>
     <Grid Margin="5,5">
         <Grid.RowDefinitions>
             <RowDefinition Height="20"/>
@@ -69,7 +73,7 @@
             Text="{StaticResource DeleteButton}"
             TextColor="White"
             BackgroundColor="Red"
-            Command="{Binding DeleteCommand}"/>
+            Command="{Binding DeleteComand}"/>
         <CollectionView
             Grid.Row="5"
             Grid.Column="0"
@@ -104,12 +108,14 @@
                             Grid.Row="0"
                             Grid.Column="1"
                             Text="{Binding Name}"
-                            FontSize="Medium"/>
+                            FontSize="Medium"
+                            TextColor="White"/>
                             <Label
                             Grid.Row="1"
                             Grid.Column="1"
                             Text="{Binding Abrv}"
-                            FontSize="Medium"/>
+                            FontSize="Medium"
+                            TextColor="White"/>
                         </Grid>
                     </Frame>
                 </DataTemplate>

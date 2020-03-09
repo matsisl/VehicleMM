@@ -1,10 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using AutoMapper;
+using Service;
+using System.ComponentModel;
+using VehicleMM.Model;
+using VehicleMM.Utils;
 
 namespace VehicleMM.ViewModel
 {
-    class VehicleModelViewModel
+    public class VehicleModelViewModel : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+        
     }
 }
