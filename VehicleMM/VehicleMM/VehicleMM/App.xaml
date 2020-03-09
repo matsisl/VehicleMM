@@ -3,6 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="VehicleMM.App">
     <Application.Resources>
-
+        <ResourceDictionary>
+            <Color x:Key="TamnoSiva">#383030</Color>
+            <Color x:Key="TrulaVisnja">#6F1A07</Color>
+            <Color x:Key="PrljavaBijela">#F9FDFF</Color>
+            <x:String x:Key="Title">Vehicle makes</x:String>
+            <x:String x:Key="CreateButton">CREATE</x:String>
+            <x:String x:Key="UpdateButton">UPDATE</x:String>
+            <x:String x:Key="DeleteButton">DELETE</x:String>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

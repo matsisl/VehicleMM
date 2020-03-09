@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="VehicleMM.View.VehicleMakeView"
+             BackgroundColor="{StaticResource PrljavaBijela}">
+    <Grid Margin="5,5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="0.5*"/>
+            <RowDefinition Height="0.5*"/>
+            <RowDefinition Height="0.5*"/>
+            <RowDefinition Height="0.5*"/>
+            <RowDefinition Height="3.5*"/>
+            <RowDefinition Height="0.5*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Label
+            Grid.Column="0"
+            Grid.ColumnSpan="3"
+            Grid.Row="0"
+            Text="{StaticResource Title}"
+            TextColor="Black"
+            FontSize="Medium"
+            FontAttributes="Bold"
+            HorizontalTextAlignment="Center"/>
+        <Editor
+            Grid.Row="1"
+            Grid.Column="0"
+            Grid.ColumnSpan="3"
+            Placeholder="Enter vehicle id"
+            PlaceholderColor="LightGray"
+            Text="{Binding Id}"
+            Keyboard="Numeric"/>
+        <Editor
+            Grid.Row="2"
+            Grid.Column="0"
+            Grid.ColumnSpan="3"
+            Text="{Binding Name}"
+            Placeholder="Enter vehicle name"
+            PlaceholderColor="LightGray"/>
+        <Editor
+            Grid.Row="3"
+            Grid.Column="0"
+            Grid.ColumnSpan="3"
+            Text="{Binding Abrv}"
+            Placeholder="Enter vehicle abrv"
+            PlaceholderColor="LightGray"/>
+        <Button
+            Grid.Row="4"
+            Grid.Column="0"
+            Text="{StaticResource CreateButton}"
+            TextColor="White"
+            BackgroundColor="ForestGreen"
+            Command="{Binding CreateComand}"/>
+        <Button
+            Grid.Row="4"
+            Grid.Column="1"
+            Text="{StaticResource UpdateButton}"
+            TextColor="White"
+            BackgroundColor="OrangeRed"
+            Command="{Binding UpdateCommand}"/>
+        <Button
+            Grid.Row="4"
+            Grid.Column="2"
+            Text="{StaticResource DeleteButton}"
+            TextColor="White"
+            BackgroundColor="Red"
+            Command="{Binding DeleteCommand}"/>
+        <CollectionView
+            Grid.Row="5"
+            Grid.Column="0"
+            Grid.ColumnSpan="3"
+            ItemsSource="{Binding VehicleMakes}"
+            ItemsUpdatingScrollMode="KeepLastItemInView">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame
+                        Padding="0,10">
+                        <Grid BackgroundColor="{StaticResource TamnoSiva}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="0.7*" />
+                                <ColumnDefinition Width="2.5*"/>
+                            </Grid.ColumnDefinitions>
+                            <Label
+                            Grid.Row="0"
+                            Grid.RowSpan="2"
+                            Grid.Column="0"
+                            Text="{Binding Id}"
+                            FontSize="Large"
+                            FontAttributes="Bold"
+                            TextColor="White"
+                            BackgroundColor="{StaticResource TrulaVisnja}"
+                            VerticalTextAlignment="Center"
+                            HorizontalTextAlignment="Center"/>
+                            <Label
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Text="{Binding Name}"
+                            FontSize="Medium"/>
+                            <Label
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Text="{Binding Abrv}"
+                            FontSize="Medium"/>
+                        </Grid>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>
