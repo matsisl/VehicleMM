@@ -27,7 +27,7 @@ namespace Service
         public int Delete(VehicleModel entity)
         {
             Repository.VehicleModel vehicleModel = mapper.Map<Repository.VehicleModel>(entity);
-            return dataSource.GetConnection().DeleteAsync(vehicleModel).Result;
+            return dataSource.GetConnection().Table<Repository.VehicleModel>().DeleteAsync(x => x.Id == vehicleModel.Id && x.MakeId == vehicleModel.MakeId).Result;
         }
 
         public List<VehicleModel> Filter(string filter)
@@ -82,6 +82,27 @@ namespace Service
                 int limit = indexOfPage * pageSize;
                 object[] param = { limit, pageSize };
                 List<Repository.VehicleModel> vehicleModels = dataSource.GetConnection().QueryAsync<Repository.VehicleModel>(sqlQuery, param).Result;
+                List<VehicleModel> models = new List<VehicleModel>();
+                foreach (Repository.VehicleModel item in vehicleModels)
+                {
+                    models.Add(mapper.Map<VehicleModel>(item));
+                }
+                return models;
+            }
+        }
+
+        public List<VehicleModel> PagingByMake(int makeId, int indexOfPage, int pageSize)
+        {
+            if (indexOfPage < 0 || pageSize <= 0)
+            {
+                return null;
+            }
+            else
+            {
+                int offset = indexOfPage * pageSize;
+                string sqlQuery = "SELECT * FROM VehicleModel WHERE MakeId=? LIMIT ? OFFSET ?";
+                object[] param = { makeId, pageSize, offset };
+                List<Repository.VehicleModel> vehicleModels = dataSource.GetConnection().QueryAsync<Repository.VehicleModel>(sqlQuery,param).Result;
                 List<VehicleModel> models = new List<VehicleModel>();
                 foreach (Repository.VehicleModel item in vehicleModels)
                 {

@@ -46,6 +46,11 @@ namespace VehicleMM.ViewModel
             {
                 seletedMakeCommandFunction();
             });
+
+            SearchCommand = new Command(() =>
+            {
+                searchFunction();
+            });
         }
 
         public int Id
@@ -75,6 +80,16 @@ namespace VehicleMM.ViewModel
                 PropertyChanged.Invoke(this, new PropertyChangedEventArgs(nameof(vehicleMake.Abrv)));
             }
         }
+        string filter = "";
+        public string Filter
+        {
+            get => filter;
+            set
+            {
+                filter = value;
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs(nameof(filter)));
+            }
+        }
 
         public ObservableCollection<VehicleMakeModel> VehicleMakes { get; }
 
@@ -82,6 +97,7 @@ namespace VehicleMM.ViewModel
         public Command UpdateCommand { get; }
         public Command DeleteComand { get; }
         public Command SelectedMakeCommand { get; }
+        public Command SearchCommand { get; }
 
         private VehicleMakeModel selectedVehicleMake;
         public VehicleMakeModel SelectedVehicleMake
@@ -166,6 +182,24 @@ namespace VehicleMM.ViewModel
             }
             
 
+        }
+
+        private void searchFunction()
+        {
+            VehicleMakes.Clear();
+            if (!Filter.Equals(""))
+            {
+                List<VehicleMake> makes = vms.Filter(filter);
+                List<VehicleMakeModel> vehicleMakeModels = new List<VehicleMakeModel>();
+                foreach (VehicleMake item in makes)
+                {
+                    VehicleMakes.Add(mapper.Map<VehicleMakeModel>(item));
+                }
+            }
+            else
+            {
+                getVehicleMake();
+            }
         }
     }
 }

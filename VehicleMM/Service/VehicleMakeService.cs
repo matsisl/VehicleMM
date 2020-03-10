@@ -30,14 +30,7 @@ namespace Service
             int provjera = 0;
             Repository.VehicleMake vehicleMake = mapper.Map<Repository.VehicleMake>(entity);
             provjera = dataSource.GetConnection().Table<Repository.VehicleModel>().DeleteAsync(x => x.MakeId == vehicleMake.Id).Result;
-            if (provjera != 0)
-            {
-                return dataSource.GetConnection().DeleteAsync(vehicleMake).Result;
-            }
-            else
-            {
-                return provjera;
-            }
+            return dataSource.GetConnection().DeleteAsync(vehicleMake).Result;
         }
 
         public List<VehicleMake> Filter(string filter)

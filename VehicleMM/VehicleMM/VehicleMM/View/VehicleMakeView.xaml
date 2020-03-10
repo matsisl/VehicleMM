@@ -124,5 +124,20 @@
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
+        <Entry
+            Grid.Row="6"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Placeholder="Enter filter"
+            PlaceholderColor="LightGray"
+            Text="{Binding Filter}"
+            ClearButtonVisibility="WhileEditing"/>
+        <Button
+            Grid.Row="6"
+            Grid.Column="2"
+            Text="{StaticResource SearchButton}"
+            BackgroundColor="Blue"
+            TextColor="White"
+            Command="{Binding SearchCommand}"/>
     </Grid>
 </ContentPage>

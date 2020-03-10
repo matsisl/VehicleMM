@@ -7,5 +7,6 @@ namespace Service
     public interface IVehicleModelService :IService<VehicleModel>
     {
         List<VehicleModel> GetVehicleModelsByMakeId(int makeId);
+        List<VehicleModel> PagingByMake(int makeId, int indexOfPage, int pageSize);
     }
 }

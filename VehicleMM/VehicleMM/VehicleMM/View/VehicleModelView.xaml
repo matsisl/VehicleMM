@@ -117,5 +117,19 @@
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
+        <Button
+            Grid.Row="6"
+            Grid.Column="0"
+            Text="{StaticResource PreviousButton}"
+            Command="{Binding  PreviousCommand}"
+            BackgroundColor="Blue"
+            TextColor="White"/>
+        <Button
+            Grid.Row="6"
+            Grid.Column="2"
+            Text="{StaticResource NextButton}"
+            Command="{Binding NextCommand}"
+            BackgroundColor="Blue"
+            TextColor="White"/>
     </Grid>
 </ContentPage>

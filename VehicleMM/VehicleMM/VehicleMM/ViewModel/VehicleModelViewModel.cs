@@ -18,7 +18,8 @@ namespace VehicleMM.ViewModel
         VehicleModelService vms;
         public VehicleMakeModel vehicleMake;
         VehicleModelModel vehicleModel = new VehicleModelModel();
-
+        int pageIndex;
+        int pageSize;
         public VehicleModelViewModel(VehicleMakeModel vehicleMakeModel)
         {
             vehicleMake = vehicleMakeModel;
@@ -26,6 +27,8 @@ namespace VehicleMM.ViewModel
             container = AutofacHelper.Build();
             vms = container.ResolveNamed<VehicleModelService>("ModelService");
             VehicleModels = new ObservableCollection<VehicleModelModel>();
+            pageIndex = 0;
+            pageSize = 4;
             getVehicleModel();
 
             CreateComand = new Command(() =>
@@ -42,6 +45,17 @@ namespace VehicleMM.ViewModel
             {
                 updateCommandFunction();
             });
+
+            NextCommand = new Command(() => 
+            {
+                nextCommandFunction();
+            });
+
+            PreviousCommand = new Command(() =>
+            {
+                previousCommandFunction();
+            });
+            
         }
 
         public string MakeName
@@ -81,16 +95,31 @@ namespace VehicleMM.ViewModel
         public Command CreateComand { get; }
         public Command UpdateCommand { get; }
         public Command DeleteComand { get; }
+        public Command NextCommand { get; }
+        public Command PreviousCommand { get; }
 
         private void getVehicleModel()
         {
-            VehicleModels.Clear();
-            List<VehicleModel> models = vms.GetVehicleModelsByMakeId(vehicleMake.Id);
-            List<VehicleModelModel> vehicleMakeModels = new List<VehicleModelModel>();
-            foreach (VehicleModel item in models)
+            
+            List<VehicleModel> models = vms.PagingByMake(vehicleMake.Id, pageIndex, pageSize);           
+            if (models==null)
             {
-                VehicleModels.Add(mapper.Map<VehicleModelModel>(item));
+                pageIndex--;
             }
+            else if (models.Count ==0)
+            {
+                pageIndex--;
+            }
+            else
+            {
+                VehicleModels.Clear();
+                List<VehicleModelModel> vehicleMakeModels = new List<VehicleModelModel>();
+                foreach (VehicleModel item in models)
+                {
+                    VehicleModels.Add(mapper.Map<VehicleModelModel>(item));
+                }
+            }
+
         }
 
         private void createCommandFunction()
@@ -114,6 +143,7 @@ namespace VehicleMM.ViewModel
             if (i != 0)
             {
                 Application.Current.MainPage.DisplayAlert("Message", "Vehicle make " + vehicleModel.Id + " is deleted!", "Ok");
+                VehicleModels.Clear();
                 resetEnterData();
                 getVehicleModel();
             }
@@ -143,8 +173,24 @@ namespace VehicleMM.ViewModel
             Id = 0;
             Name = "";
             Abrv = "";
+            pageIndex = 0;
         }
-    }
+        
+        private void nextCommandFunction()
+        {
+            pageIndex++;
+            getVehicleModel();
+        }
 
+        private void previousCommandFunction()
+        {
+            if (pageIndex > 0)
+            {
+                pageIndex--;
+                getVehicleModel();
+            }
+        }
+
+    }
 }
 

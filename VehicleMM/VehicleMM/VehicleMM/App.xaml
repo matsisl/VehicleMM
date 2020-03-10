@@ -11,6 +11,9 @@
             <x:String x:Key="CreateButton">CREATE</x:String>
             <x:String x:Key="UpdateButton">UPDATE</x:String>
             <x:String x:Key="DeleteButton">DELETE</x:String>
+            <x:String x:Key="SearchButton">SEARCH</x:String>
+            <x:String x:Key="NextButton">NEXT</x:String>
+            <x:String x:Key="PreviousButton">PREVIOUS</x:String>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
