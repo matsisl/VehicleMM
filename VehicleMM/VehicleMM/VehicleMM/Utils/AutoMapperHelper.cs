@@ -12,7 +12,9 @@ namespace VehicleMM.Utils
         internal static IMapper Maps()
         {
             MapperConfiguration mapperConfiguration = new MapperConfiguration(
-                conf => conf.CreateMap<VehicleMake,VehicleMakeModel>().ReverseMap());
+                conf => { conf.CreateMap<VehicleMake, VehicleMakeModel>().ReverseMap();
+                    conf.CreateMap<VehicleModel, VehicleModelModel>().ReverseMap();
+                });
             return mapperConfiguration.CreateMapper();
         }
     }

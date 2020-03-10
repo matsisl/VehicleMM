@@ -1,6 +1,7 @@
 ﻿using System;
 using VehicleMM.View;
 using Xamarin.Forms;
+using Xamarin.Forms.PlatformConfiguration;
 using Xamarin.Forms.Xaml;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
@@ -12,7 +13,8 @@ namespace VehicleMM
         {
             InitializeComponent();
 
-            MainPage = new VehicleMakeView();
+            var navigationPage = new NavigationPage(new VehicleMakeView());
+            MainPage = navigationPage;
         }
 
         protected override void OnStart()

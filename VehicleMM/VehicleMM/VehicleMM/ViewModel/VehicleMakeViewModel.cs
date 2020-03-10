@@ -9,6 +9,7 @@ using VehicleMM.Utils;
 using Autofac;
 using System.Collections.ObjectModel;
 using Xamarin.Forms;
+using VehicleMM.View;
 
 namespace VehicleMM.ViewModel
 {
@@ -18,7 +19,7 @@ namespace VehicleMM.ViewModel
         private Autofac.IContainer container;
         private IMapper mapper = AutoMapperHelper.Maps();
         VehicleMakeService vms;
-        VehicleMakeModel model = new VehicleMakeModel();
+        VehicleMakeModel vehicleMake = new VehicleMakeModel();
         public VehicleMakeViewModel()
         {
             container = AutofacHelper.Build();
@@ -40,33 +41,38 @@ namespace VehicleMM.ViewModel
             {
                 updateCommandFunction();
             });
+
+            SelectedMakeCommand = new Command(() =>
+            {
+                seletedMakeCommandFunction();
+            });
         }
 
         public int Id
         {
-            get => model.Id;
+            get => vehicleMake.Id;
             set
             {
-                model.Id = value;
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs(nameof(model.Id)));
+                vehicleMake.Id = value;
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs(nameof(vehicleMake.Id)));
             }
         }
         public string Name
         {
-            get => model.Name;
+            get => vehicleMake.Name;
             set
             {
-                model.Name = value;
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs(nameof(model.Name)));
+                vehicleMake.Name = value;
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs(nameof(vehicleMake.Name)));
             }
         }
         public string Abrv
         {
-            get => model.Abrv;
+            get => vehicleMake.Abrv;
             set
             {
-                model.Abrv = value;
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs(nameof(model.Abrv)));
+                vehicleMake.Abrv = value;
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs(nameof(vehicleMake.Abrv)));
             }
         }
 
@@ -75,6 +81,17 @@ namespace VehicleMM.ViewModel
         public Command CreateComand { get; }
         public Command UpdateCommand { get; }
         public Command DeleteComand { get; }
+        public Command SelectedMakeCommand { get; }
+
+        private VehicleMakeModel selectedVehicleMake;
+        public VehicleMakeModel SelectedVehicleMake
+        {
+            get => selectedVehicleMake;
+            set{
+                selectedVehicleMake = value;
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs(nameof(VehicleMakeModel)));
+            }
+        }
 
         private void getVehicleMake()
         {
@@ -89,7 +106,7 @@ namespace VehicleMM.ViewModel
 
         private void createCommandFunction()
         {
-            int i = vms.Create(mapper.Map<VehicleMake>(model));
+            int i = vms.Create(mapper.Map<VehicleMake>(vehicleMake));
             if (i != 0)
             {
                 Application.Current.MainPage.DisplayAlert("Message", "New vehicle make is created!", "Ok");
@@ -104,10 +121,10 @@ namespace VehicleMM.ViewModel
 
         private void deleteCommandFunction()
         {
-            int i=vms.Delete(mapper.Map<VehicleMake>(model));
+            int i=vms.Delete(mapper.Map<VehicleMake>(vehicleMake));
             if (i != 0)
             {
-                Application.Current.MainPage.DisplayAlert("Message", "Vehicle make " + model.Id+" is deleted!", "Ok");
+                Application.Current.MainPage.DisplayAlert("Message", "Vehicle make " + vehicleMake.Id+" is deleted!", "Ok");
                 resetEnterData();
                 getVehicleMake();
             }
@@ -119,10 +136,10 @@ namespace VehicleMM.ViewModel
 
         private void updateCommandFunction()
         {
-            int i = vms.Update(mapper.Map<VehicleMake>(model));
+            int i = vms.Update(mapper.Map<VehicleMake>(vehicleMake));
             if(i != 0)
             {
-                Application.Current.MainPage.DisplayAlert("Message", "Vehicle make " + model.Id + " is updated!", "Ok");
+                Application.Current.MainPage.DisplayAlert("Message", "Vehicle make " + vehicleMake.Id + " is updated!", "Ok");
                 resetEnterData();
                 getVehicleMake();
             }
@@ -137,6 +154,18 @@ namespace VehicleMM.ViewModel
             Id = 0;
             Name = "";
             Abrv = "";
+        }
+
+        private async void seletedMakeCommandFunction()
+        {
+            if (!(SelectedVehicleMake is null))
+            {
+                var vehicleModelViewModel = new VehicleModelViewModel(SelectedVehicleMake);
+                await Application.Current.MainPage.Navigation.PushAsync(new VehicleModelView(vehicleModelViewModel));
+                SelectedVehicleMake = null;
+            }
+            
+
         }
     }
 }

@@ -18,6 +18,7 @@ namespace VehicleMM.Utils
         private static void RegisterTypes(ContainerBuilder builder)
         {
             builder.RegisterType<VehicleMakeService>().Named<VehicleMakeService>("MakeService").InstancePerLifetimeScope();
+            builder.RegisterType<VehicleModelService>().Named<VehicleModelService>("ModelService").InstancePerLifetimeScope();
         }
     }
 }
