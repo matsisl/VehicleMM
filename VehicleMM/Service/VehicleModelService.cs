@@ -18,7 +18,7 @@ namespace Service
             mapper = AutoMapperHelper.Maps();
         }
 
-        public int Create(VehicleModel entity)
+        public int Add(VehicleModel entity)
         {
             Repository.VehicleModel vehicleModel = mapper.Map<Repository.VehicleModel>(entity);
             return dataSource.GetConnection().InsertAsync(vehicleModel).Result;
@@ -28,6 +28,18 @@ namespace Service
         {
             Repository.VehicleModel vehicleModel = mapper.Map<Repository.VehicleModel>(entity);
             return dataSource.GetConnection().DeleteAsync(vehicleModel).Result;
+        }
+
+        public List<VehicleModel> Filter(string filter)
+        {
+            List<Repository.VehicleModel> vehicleModles = dataSource.GetConnection().Table<Repository.VehicleModel>().Where(
+                x => x.Name.Contains(filter) || x.Abrv.Contains(filter)).ToListAsync().Result;
+            List<VehicleModel> models = new List<VehicleModel>();
+            foreach (Repository.VehicleModel item in vehicleModles)
+            {
+                models.Add(mapper.Map<VehicleModel>(item));
+            }
+            return models;
         }
 
         public List<VehicleModel> GetAll()
@@ -58,6 +70,49 @@ namespace Service
             return vehicleModels;
         }
 
+        public List<VehicleModel> Paging(int indexOfPage, int pageSize)
+        {
+            if (indexOfPage < 0 || pageSize <= 0 || indexOfPage > pageSize)
+            {
+                return null;
+            }
+            else
+            {
+                string sqlQuery = "SELECT * FROM VehiclModel LIMIT ? OFFSET ?";
+                int limit = indexOfPage * pageSize;
+                object[] param = { limit, pageSize };
+                List<Repository.VehicleModel> vehicleModels = dataSource.GetConnection().QueryAsync<Repository.VehicleModel>(sqlQuery, param).Result;
+                List<VehicleModel> models = new List<VehicleModel>();
+                foreach (Repository.VehicleModel item in vehicleModels)
+                {
+                    models.Add(mapper.Map<VehicleModel>(item));
+                }
+                return models;
+            }
+        }
+
+        public List<VehicleModel> SortAsc()
+        {
+            List<Repository.VehicleModel> vehicleModels = dataSource.GetConnection().Table<Repository.VehicleModel>().OrderBy(x => x.Name).ToListAsync().Result;
+            List<VehicleModel> models = new List<VehicleModel>();
+            foreach (Repository.VehicleModel item in vehicleModels)
+            {
+                models.Add(mapper.Map<VehicleModel>(item));
+            }
+            return models;
+        }
+
+        public List<VehicleModel> SortDesc()
+        {
+            List<Repository.VehicleModel> vehicleModels = dataSource.GetConnection().Table<Repository.VehicleModel>().OrderByDescending(x => x.Name).ToListAsync().Result;
+            List<VehicleModel> models = new List<VehicleModel>();
+            foreach (Repository.VehicleModel item in vehicleModels)
+            {
+                models.Add(mapper.Map<VehicleModel>(item));
+            }
+            return models;
+
+        }
         public int Update(VehicleModel entity)
         {
             Repository.VehicleModel vehicleModle = mapper.Map<Repository.VehicleModel>(entity);

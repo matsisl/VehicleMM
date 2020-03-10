@@ -8,8 +8,12 @@ namespace Service
     {
         List<TEntity> GetAll();
         TEntity GetById(int id);
-        int Create(TEntity entity);
+        int Add(TEntity entity);
         int Update(TEntity entity);
         int Delete(TEntity entity);
+        List<TEntity> SortAsc();
+        List<TEntity> SortDesc();
+        List<TEntity> Paging(int indexOfPage, int pageSize);
+        List<TEntity> Filter(string filter);
     }
 }

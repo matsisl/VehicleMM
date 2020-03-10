@@ -95,7 +95,7 @@ namespace VehicleMM.ViewModel
 
         private void createCommandFunction()
         {
-            int i = vms.Create(mapper.Map<VehicleModel>(vehicleModel));
+            int i = vms.Add(mapper.Map<VehicleModel>(vehicleModel));
             if (i != 0)
             {
                 Application.Current.MainPage.DisplayAlert("Message", "New vehicle make is created!", "Ok");
