@@ -9,8 +9,8 @@ namespace Service
 {
     public class VehicleMakeService : IService<VehicleMake>
     {
-        private IDataSource dataSource;
-        private IMapper mapper;
+        IDataSource dataSource;
+        IMapper mapper;
 
         public VehicleMakeService()
         {

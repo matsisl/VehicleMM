@@ -13,47 +13,49 @@ namespace VehicleMM.ViewModel
     public class VehicleModelViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        private Autofac.IContainer container;
-        private IMapper mapper = AutoMapperHelper.Maps();
+        Autofac.IContainer container;
+        IMapper mapper;
         VehicleModelService vms;
         public VehicleMakeModel vehicleMake;
-        VehicleModelModel vehicleModel = new VehicleModelModel();
+        VehicleModelModel vehicleModel;
         int pageIndex;
         int pageSize;
         public VehicleModelViewModel(VehicleMakeModel vehicleMakeModel)
         {
+            mapper = AutoMapperHelper.Maps();
             vehicleMake = vehicleMakeModel;
+            vehicleModel = new VehicleModelModel();
             vehicleModel.MakeId = vehicleMake.Id;
             container = AutofacHelper.Build();
             vms = container.ResolveNamed<VehicleModelService>("ModelService");
             VehicleModels = new ObservableCollection<VehicleModelModel>();
             pageIndex = 0;
             pageSize = 4;
-            getVehicleModel();
+            GetVehicleModel();
 
             CreateComand = new Command(() =>
             {
-                createCommandFunction();
+                CreateCommandFunction();
             });
 
             DeleteComand = new Command(() =>
             {
-                deleteCommandFunction();
+                DeleteCommandFunction();
             });
 
             UpdateCommand = new Command(() =>
             {
-                updateCommandFunction();
+                UpdateCommandFunction();
             });
 
             NextCommand = new Command(() => 
             {
-                nextCommandFunction();
+                NextCommandFunction();
             });
 
             PreviousCommand = new Command(() =>
             {
-                previousCommandFunction();
+                PreviousCommandFunction();                
             });
             
         }
@@ -98,7 +100,7 @@ namespace VehicleMM.ViewModel
         public Command NextCommand { get; }
         public Command PreviousCommand { get; }
 
-        private void getVehicleModel()
+        private void GetVehicleModel()
         {
             
             List<VehicleModel> models = vms.PagingByMake(vehicleMake.Id, pageIndex, pageSize);           
@@ -122,53 +124,53 @@ namespace VehicleMM.ViewModel
 
         }
 
-        private void createCommandFunction()
+        private void CreateCommandFunction()
         {
-            int i = vms.Add(mapper.Map<VehicleModel>(vehicleModel));
-            if (i != 0)
+            int vehicleModelCreated = vms.Add(mapper.Map<VehicleModel>(vehicleModel));
+            if (vehicleModelCreated != 0)
             {
-                Application.Current.MainPage.DisplayAlert("Message", "New vehicle make is created!", "Ok");
-                resetEnterData();
-                getVehicleModel();
+                DisplayAlert("New vehicle make is created!");
+                ResetEnterData();
+                GetVehicleModel();
             }
             else
             {
-                Application.Current.MainPage.DisplayAlert("Message", "Creating failed!", "Ok");
+                DisplayAlert("Creating failed!");
             }
         }
 
-        private void deleteCommandFunction()
+        private void DeleteCommandFunction()
         {
-            int i = vms.Delete(mapper.Map<VehicleModel>(vehicleModel));
-            if (i != 0)
+            int vehicleModelDeleted = vms.Delete(mapper.Map<VehicleModel>(vehicleModel));
+            if (vehicleModelDeleted != 0)
             {
-                Application.Current.MainPage.DisplayAlert("Message", "Vehicle make " + vehicleModel.Id + " is deleted!", "Ok");
+                DisplayAlert("Vehicle make " + vehicleModel.Id + " is deleted!");
                 VehicleModels.Clear();
-                resetEnterData();
-                getVehicleModel();
+                ResetEnterData();
+                GetVehicleModel();
             }
             else
             {
-                Application.Current.MainPage.DisplayAlert("Message", "Deleting failed!", "Ok");
+                DisplayAlert("Deleting failed!");
             }
         }
 
-        private void updateCommandFunction()
+        private void UpdateCommandFunction()
         {
-            int i = vms.Update(mapper.Map<VehicleModel>(vehicleModel));
-            if (i != 0)
+            int vehickeModelUpdated = vms.Update(mapper.Map<VehicleModel>(vehicleModel));
+            if (vehickeModelUpdated != 0)
             {
-                Application.Current.MainPage.DisplayAlert("Message", "Vehicle make " + vehicleModel.Id + " is updated!", "Ok");
-                resetEnterData();
-                getVehicleModel();
+                DisplayAlert("Vehicle make " + vehicleModel.Id + " is updated!");
+                ResetEnterData();
+                GetVehicleModel();
             }
             else
             {
-                Application.Current.MainPage.DisplayAlert("Message", "Updating failed!", "Ok");
+                DisplayAlert("Updating failed!");
             }
         }
 
-        private void resetEnterData()
+        private void ResetEnterData()
         {
             Id = 0;
             Name = "";
@@ -176,21 +178,25 @@ namespace VehicleMM.ViewModel
             pageIndex = 0;
         }
         
-        private void nextCommandFunction()
+        private void NextCommandFunction()
         {
             pageIndex++;
-            getVehicleModel();
+            GetVehicleModel();
         }
 
-        private void previousCommandFunction()
+        private void PreviousCommandFunction()
         {
             if (pageIndex > 0)
             {
                 pageIndex--;
-                getVehicleModel();
+                GetVehicleModel();
             }
         }
 
+        private void DisplayAlert(string message)
+        {
+            Application.Current.MainPage.DisplayAlert("Message", message, "Ok");
+        }
     }
 }
 

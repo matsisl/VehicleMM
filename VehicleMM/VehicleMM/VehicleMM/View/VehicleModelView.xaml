@@ -2,10 +2,10 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="VehicleMM.View.VehicleModelView"
-             BackgroundColor="{StaticResource PrljavaBijela}">
+             BackgroundColor="{StaticResource ViewBackgroundColor}">
     <Grid Margin="5,5">
         <Grid.RowDefinitions>
-            <RowDefinition Height="20"/>
+            <RowDefinition Height="25"/>
             <RowDefinition Height="0.5*"/>
             <RowDefinition Height="0.5*"/>
             <RowDefinition Height="0.5*"/>
@@ -23,7 +23,7 @@
             Grid.ColumnSpan="3"
             Grid.Row="0"
             Text="{Binding MakeName}"
-            TextColor="Black"
+            TextColor="{StaticResource TitelColor}"
             FontSize="Medium"
             FontAttributes="Bold"
             HorizontalTextAlignment="Center"/>
@@ -31,8 +31,8 @@
             Grid.Row="1"
             Grid.Column="0"
             Grid.ColumnSpan="3"
-            Placeholder="Enter vehicle id"
-            PlaceholderColor="LightGray"
+            Placeholder="{StaticResource EnterID}"
+            PlaceholderColor="{StaticResource EntersPlaceholderColor}"
             Text="{Binding Id}"
             Keyboard="Numeric"/>
         <Editor
@@ -40,35 +40,35 @@
             Grid.Column="0"
             Grid.ColumnSpan="3"
             Text="{Binding Name}"
-            Placeholder="Enter vehicle name"
-            PlaceholderColor="LightGray"/>
+            Placeholder="{StaticResource EnterName}"
+            PlaceholderColor="{StaticResource EntersPlaceholderColor}"/>
         <Editor
             Grid.Row="3"
             Grid.Column="0"
             Grid.ColumnSpan="3"
             Text="{Binding Abrv}"
-            Placeholder="Enter vehicle abrv"
-            PlaceholderColor="LightGray"/>
+            Placeholder="{StaticResource EnterAbrv}"
+            PlaceholderColor="{StaticResource EntersPlaceholderColor}"/>
         <Button
             Grid.Row="4"
             Grid.Column="0"
             Text="{StaticResource CreateButton}"
-            TextColor="White"
-            BackgroundColor="ForestGreen"
+            TextColor="{StaticResource ButtonTextColor}"
+            BackgroundColor="{StaticResource CreateButtonColor}"
             Command="{Binding CreateComand}"/>
         <Button
             Grid.Row="4"
             Grid.Column="1"
             Text="{StaticResource UpdateButton}"
-            TextColor="White"
-            BackgroundColor="OrangeRed"
+            TextColor="{StaticResource ButtonTextColor}"
+            BackgroundColor="{StaticResource UpdateButtonColor}"
             Command="{Binding UpdateCommand}"/>
         <Button
             Grid.Row="4"
             Grid.Column="2"
             Text="{StaticResource DeleteButton}"
-            TextColor="White"
-            BackgroundColor="Red"
+            TextColor="{StaticResource ButtonTextColor}"
+            BackgroundColor="{StaticResource DeleteButtonColor}"
             Command="{Binding DeleteComand}"/>
         <CollectionView
             Grid.Row="5"
@@ -80,7 +80,7 @@
                 <DataTemplate>
                     <Frame
                         Padding="0,10">
-                        <Grid BackgroundColor="{StaticResource TamnoSiva}">
+                        <Grid BackgroundColor="{StaticResource ItemBackgroundColor}">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="*"/>
@@ -96,8 +96,8 @@
                             Text="{Binding Id}"
                             FontSize="Large"
                             FontAttributes="Bold"
-                            TextColor="White"
-                            BackgroundColor="{StaticResource TrulaVisnja}"
+                            TextColor="{StaticResource ItemTextColor}"
+                            BackgroundColor="{StaticResource ItemIdBackgroundColor}"
                             VerticalTextAlignment="Center"
                             HorizontalTextAlignment="Center"/>
                             <Label
@@ -105,13 +105,13 @@
                             Grid.Column="1"
                             Text="{Binding Name}"
                             FontSize="Medium"
-                            TextColor="White"/>
+                            TextColor="{StaticResource ItemTextColor}"/>
                             <Label
                             Grid.Row="1"
                             Grid.Column="1"
                             Text="{Binding Abrv}"
                             FontSize="Medium"
-                            TextColor="White"/>
+                            TextColor="{StaticResource ItemTextColor}"/>
                         </Grid>
                     </Frame>
                 </DataTemplate>
@@ -122,14 +122,14 @@
             Grid.Column="0"
             Text="{StaticResource PreviousButton}"
             Command="{Binding  PreviousCommand}"
-            BackgroundColor="Blue"
-            TextColor="White"/>
+            BackgroundColor="{StaticResource PageNavigationButtonColor}"
+            TextColor="{StaticResource ButtonTextColor}"/>
         <Button
             Grid.Row="6"
             Grid.Column="2"
             Text="{StaticResource NextButton}"
             Command="{Binding NextCommand}"
-            BackgroundColor="Blue"
-            TextColor="White"/>
+            BackgroundColor="{StaticResource PageNavigationButtonColor}"
+            TextColor="{StaticResource ButtonTextColor}"/>
     </Grid>
 </ContentPage>

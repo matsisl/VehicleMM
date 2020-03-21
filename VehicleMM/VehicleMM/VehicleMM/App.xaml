@@ -4,9 +4,19 @@
              x:Class="VehicleMM.App">
     <Application.Resources>
         <ResourceDictionary>
-            <Color x:Key="TamnoSiva">#383030</Color>
-            <Color x:Key="TrulaVisnja">#6F1A07</Color>
-            <Color x:Key="PrljavaBijela">#F9FDFF</Color>
+            <Color x:Key="ItemBackgroundColor">#383030</Color>
+            <Color x:Key="ItemIdBackgroundColor">#6F1A07</Color>
+            <Color x:Key="ViewBackgroundColor">#F9FDFF</Color>
+            <Color x:Key="EntersPlaceholderColor">LightGray</Color>
+            <Color x:Key="TitelColor">Black</Color>
+            <Color x:Key="CreateButtonColor">ForestGreen</Color>
+            <Color x:Key="UpdateButtonColor">OrangeRed</Color>
+            <Color x:Key="DeleteButtonColor">Red</Color>
+            <Color x:Key="SearchButtonColor">Blue</Color>
+            <Color x:Key="PageNavigationButtonColor">Blue</Color>
+            <Color x:Key="ButtonTextColor">White</Color>
+            <Color x:Key="ItemTextColor">White</Color>
+            
             <x:String x:Key="Title">Vehicle makes</x:String>
             <x:String x:Key="CreateButton">CREATE</x:String>
             <x:String x:Key="UpdateButton">UPDATE</x:String>
@@ -14,6 +24,10 @@
             <x:String x:Key="SearchButton">SEARCH</x:String>
             <x:String x:Key="NextButton">NEXT</x:String>
             <x:String x:Key="PreviousButton">PREVIOUS</x:String>
+            <x:String x:Key="EnterID">Enter ID</x:String>
+            <x:String x:Key="EnterName">Enter name</x:String>
+            <x:String x:Key="EnterAbrv">Enter abrv</x:String>
+            <x:String x:Key="EnterFilter">Enter filter</x:String>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

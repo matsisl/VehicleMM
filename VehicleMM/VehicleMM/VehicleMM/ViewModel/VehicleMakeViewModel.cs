@@ -16,40 +16,42 @@ namespace VehicleMM.ViewModel
     public class VehicleMakeViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        private Autofac.IContainer container;
-        private IMapper mapper = AutoMapperHelper.Maps();
+        Autofac.IContainer container;
+        IMapper mapper;
         VehicleMakeService vms;
-        VehicleMakeModel vehicleMake = new VehicleMakeModel();
+        VehicleMakeModel vehicleMake;
         public VehicleMakeViewModel()
         {
+            vehicleMake = new VehicleMakeModel();
+            mapper = AutoMapperHelper.Maps();
             container = AutofacHelper.Build();
             vms = container.ResolveNamed<VehicleMakeService>("MakeService");
             VehicleMakes = new ObservableCollection<VehicleMakeModel>();
-            getVehicleMake();
+            GetVehicleMake();
 
             CreateComand = new Command(() =>
             {
-                createCommandFunction();
+                CreateCommandFunction();
             });
 
             DeleteComand = new Command(() =>
             {
-                deleteCommandFunction();
+                DeleteCommandFunction();
             });
 
             UpdateCommand = new Command(() =>
             {
-                updateCommandFunction();
+                UpdateCommandFunction();
             });
 
             SelectedMakeCommand = new Command(() =>
             {
-                seletedMakeCommandFunction();
+                SeletedMakeCommandFunction();
             });
 
             SearchCommand = new Command(() =>
             {
-                searchFunction();
+                SearchFunction();
             });
         }
 
@@ -109,7 +111,7 @@ namespace VehicleMM.ViewModel
             }
         }
 
-        private void getVehicleMake()
+        private void GetVehicleMake()
         {
             VehicleMakes.Clear();
             List<VehicleMake> makes = vms.GetAll();
@@ -120,59 +122,59 @@ namespace VehicleMM.ViewModel
             }
         }
 
-        private void createCommandFunction()
+        private void CreateCommandFunction()
         {
-            int i = vms.Add(mapper.Map<VehicleMake>(vehicleMake));
-            if (i != 0)
+            int vehicleMakeCreated = vms.Add(mapper.Map<VehicleMake>(vehicleMake));
+            if (vehicleMakeCreated != 0)
             {
-                Application.Current.MainPage.DisplayAlert("Message", "New vehicle make is created!", "Ok");
-                resetEnterData();
-                getVehicleMake();
+                DisplayAlert("New vehicle make is created!");
+                ResetEnterData();
+                GetVehicleMake();
             }
             else
             {
-                Application.Current.MainPage.DisplayAlert("Message", "Creating failed!", "Ok");
+                DisplayAlert("Creating failed!");
             }
         }
 
-        private void deleteCommandFunction()
+        private void DeleteCommandFunction()
         {
-            int i=vms.Delete(mapper.Map<VehicleMake>(vehicleMake));
-            if (i != 0)
+            int vehicleMakeDeleted=vms.Delete(mapper.Map<VehicleMake>(vehicleMake));
+            if (vehicleMakeDeleted != 0)
             {
-                Application.Current.MainPage.DisplayAlert("Message", "Vehicle make " + vehicleMake.Id+" is deleted!", "Ok");
-                resetEnterData();
-                getVehicleMake();
+                DisplayAlert("Vehicle make " + vehicleMake.Id+" is deleted!");
+                ResetEnterData();
+                GetVehicleMake();
             }
             else
             {
-                Application.Current.MainPage.DisplayAlert("Message", "Deleting failed!", "Ok");
+                DisplayAlert("Deleting failed!");
             }
         }
 
-        private void updateCommandFunction()
+        private void UpdateCommandFunction()
         {
-            int i = vms.Update(mapper.Map<VehicleMake>(vehicleMake));
-            if(i != 0)
+            int vehicleMakeUpdated = vms.Update(mapper.Map<VehicleMake>(vehicleMake));
+            if(vehicleMakeUpdated != 0)
             {
-                Application.Current.MainPage.DisplayAlert("Message", "Vehicle make " + vehicleMake.Id + " is updated!", "Ok");
-                resetEnterData();
-                getVehicleMake();
+                DisplayAlert("Vehicle make " + vehicleMake.Id + " is updated!");
+                ResetEnterData();
+                GetVehicleMake();
             }
             else
             {
-                Application.Current.MainPage.DisplayAlert("Message", "Updating failed!", "Ok");
+                DisplayAlert("Updating failed!");
             }
         }
 
-        private void resetEnterData()
+        private void ResetEnterData()
         {
             Id = 0;
             Name = "";
             Abrv = "";
         }
 
-        private async void seletedMakeCommandFunction()
+        private async void SeletedMakeCommandFunction()
         {
             if (!(SelectedVehicleMake is null))
             {
@@ -184,7 +186,7 @@ namespace VehicleMM.ViewModel
 
         }
 
-        private void searchFunction()
+        private void SearchFunction()
         {
             VehicleMakes.Clear();
             if (!Filter.Equals(""))
@@ -198,8 +200,13 @@ namespace VehicleMM.ViewModel
             }
             else
             {
-                getVehicleMake();
+                GetVehicleMake();
             }
+        }
+   
+        private void DisplayAlert(string message)
+        {
+            Application.Current.MainPage.DisplayAlert("Message", message, "Ok");
         }
     }
 }

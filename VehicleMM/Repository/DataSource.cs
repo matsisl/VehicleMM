@@ -10,7 +10,7 @@ namespace Repository
 {
     public class DataSource : IDataSource
     {
-        private SQLiteAsyncConnection connection;
+        SQLiteAsyncConnection connection;
 
         public DataSource()
         {

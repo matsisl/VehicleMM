@@ -9,8 +9,8 @@ namespace Service
 {
     public class VehicleModelService : IVehicleModelService
     {
-        private IDataSource dataSource;
-        private IMapper mapper;
+        IDataSource dataSource;
+        IMapper mapper;
         public VehicleModelService()
         {
             IContainer container = AutofacContainer.Build();
