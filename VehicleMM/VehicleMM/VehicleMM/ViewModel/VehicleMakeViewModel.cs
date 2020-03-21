@@ -111,10 +111,10 @@ namespace VehicleMM.ViewModel
             }
         }
 
-        private void GetVehicleMake()
+        private async void GetVehicleMake()
         {
             VehicleMakes.Clear();
-            List<VehicleMake> makes = vms.GetAll();
+            List<VehicleMake> makes = await vms.GetAll();
             List<VehicleMakeModel> vehicleMakeModels = new List<VehicleMakeModel>();
             foreach (VehicleMake item in makes)
             {
@@ -122,48 +122,69 @@ namespace VehicleMM.ViewModel
             }
         }
 
-        private void CreateCommandFunction()
+        private async void CreateCommandFunction()
         {
-            int vehicleMakeCreated = vms.Add(mapper.Map<VehicleMake>(vehicleMake));
-            if (vehicleMakeCreated != 0)
+            try
             {
-                DisplayAlert("New vehicle make is created!");
-                ResetEnterData();
-                GetVehicleMake();
-            }
-            else
+                int vehicleMakeCreated = await vms.Add(mapper.Map<VehicleMake>(vehicleMake));
+                if (vehicleMakeCreated != 0)
+                {
+                    DisplayAlert("New vehicle make is created!");
+                    ResetEnterData();
+                    GetVehicleMake();
+                }
+                else
+                {
+                    DisplayAlert("Creating failed!");
+                }
+            }catch(ServiceException ex)
             {
-                DisplayAlert("Creating failed!");
+                DisplayAlert(ex.Message);
             }
         }
 
-        private void DeleteCommandFunction()
+        private async void DeleteCommandFunction()
         {
-            int vehicleMakeDeleted=vms.Delete(mapper.Map<VehicleMake>(vehicleMake));
-            if (vehicleMakeDeleted != 0)
+            try
             {
-                DisplayAlert("Vehicle make " + vehicleMake.Id+" is deleted!");
-                ResetEnterData();
-                GetVehicleMake();
+                int vehicleMakeDeleted = await vms.Delete(mapper.Map<VehicleMake>(vehicleMake));
+                if (vehicleMakeDeleted != 0)
+                {
+                    DisplayAlert("Vehicle make " + vehicleMake.Id + " is deleted!");
+                    ResetEnterData();
+                    GetVehicleMake();
+                }
+                else
+                {
+                    DisplayAlert("Deleting failed!");
+                }
             }
-            else
+            catch (ServiceException ex)
             {
-                DisplayAlert("Deleting failed!");
+                DisplayAlert(ex.Message);
             }
+
         }
 
-        private void UpdateCommandFunction()
+        private async void UpdateCommandFunction()
         {
-            int vehicleMakeUpdated = vms.Update(mapper.Map<VehicleMake>(vehicleMake));
-            if(vehicleMakeUpdated != 0)
+            try
             {
-                DisplayAlert("Vehicle make " + vehicleMake.Id + " is updated!");
-                ResetEnterData();
-                GetVehicleMake();
+                int vehicleMakeUpdated = await vms.Update(mapper.Map<VehicleMake>(vehicleMake));
+                if (vehicleMakeUpdated != 0)
+                {
+                    DisplayAlert("Vehicle make " + vehicleMake.Id + " is updated!");
+                    ResetEnterData();
+                    GetVehicleMake();
+                }
+                else
+                {
+                    DisplayAlert("Updating failed!");
+                }
             }
-            else
+            catch (ServiceException ex)
             {
-                DisplayAlert("Updating failed!");
+                DisplayAlert(ex.Message);
             }
         }
 
@@ -176,22 +197,29 @@ namespace VehicleMM.ViewModel
 
         private async void SeletedMakeCommandFunction()
         {
-            if (!(SelectedVehicleMake is null))
+            try
             {
-                var vehicleModelViewModel = new VehicleModelViewModel(SelectedVehicleMake);
-                await Application.Current.MainPage.Navigation.PushAsync(new VehicleModelView(vehicleModelViewModel));
-                SelectedVehicleMake = null;
+                if (!(SelectedVehicleMake is null))
+                {
+                    var vehicleModelViewModel = new VehicleModelViewModel(SelectedVehicleMake);
+                    await Application.Current.MainPage.Navigation.PushAsync(new VehicleModelView(vehicleModelViewModel));
+                    SelectedVehicleMake = null;
+                }
             }
-            
+            catch (ServiceException ex)
+            {
+                DisplayAlert(ex.Message);
+            }
+
 
         }
 
-        private void SearchFunction()
+        private async void SearchFunction()
         {
             VehicleMakes.Clear();
             if (!Filter.Equals(""))
             {
-                List<VehicleMake> makes = vms.Filter(filter);
+                List<VehicleMake> makes = await vms.Filter(filter);
                 List<VehicleMakeModel> vehicleMakeModels = new List<VehicleMakeModel>();
                 foreach (VehicleMake item in makes)
                 {

@@ -4,6 +4,7 @@ using Repository;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Service
 {
@@ -18,126 +19,198 @@ namespace Service
             mapper = AutoMapperHelper.Maps();
         }
 
-        public int Add(VehicleModel entity)
+        public async Task<int> Add(VehicleModel entity)
         {
-            Repository.VehicleModel vehicleModel = mapper.Map<Repository.VehicleModel>(entity);
-            return dataSource.GetConnection().InsertAsync(vehicleModel).Result;
-        }
-
-        public int Delete(VehicleModel entity)
-        {
-            Repository.VehicleModel vehicleModel = mapper.Map<Repository.VehicleModel>(entity);
-            return dataSource.GetConnection().Table<Repository.VehicleModel>().DeleteAsync(x => x.Id == vehicleModel.Id && x.MakeId == vehicleModel.MakeId).Result;
-        }
-
-        public List<VehicleModel> Filter(string filter)
-        {
-            List<Repository.VehicleModel> vehicleModles = dataSource.GetConnection().Table<Repository.VehicleModel>().Where(
-                x => x.Name.Contains(filter) || x.Abrv.Contains(filter)).ToListAsync().Result;
-            List<VehicleModel> models = new List<VehicleModel>();
-            foreach (Repository.VehicleModel item in vehicleModles)
+            try
             {
-                models.Add(mapper.Map<VehicleModel>(item));
+                VehicleModelEntity vehicleModel = mapper.Map<VehicleModelEntity>(entity);
+                return await dataSource.GetConnection().InsertAsync(vehicleModel);
+            }catch(Exception ex)
+            {
+                throw new ServiceException();
             }
-            return models;
         }
 
-        public List<VehicleModel> GetAll()
+        public async Task<int> Delete(VehicleModel entity)
         {
-            List<Repository.VehicleModel> vehicleModelsDB = dataSource.GetConnection().Table<Repository.VehicleModel>().ToListAsync().Result;
-            List<VehicleModel> vehicleModels = new List<VehicleModel>();
-            foreach (Repository.VehicleModel item in vehicleModelsDB)
+            try
             {
-                vehicleModels.Add(mapper.Map<VehicleModel>(item));
+                VehicleModelEntity vehicleModel = mapper.Map<VehicleModelEntity>(entity);
+                return await dataSource.GetConnection().Table<VehicleModelEntity>().DeleteAsync(x => x.Id == vehicleModel.Id && x.MakeId == vehicleModel.MakeId);
             }
-            return vehicleModels;
-        }
-
-        public VehicleModel GetById(int id)
-        {
-            Repository.VehicleModel vehicleModel = dataSource.GetConnection().FindAsync<Repository.VehicleModel>(x => x.Id == id).Result;
-            return mapper.Map<VehicleModel>(vehicleModel);
-        }
-
-        public List<VehicleModel> GetVehicleModelsByMakeId(int makeId)
-        {
-            List<Repository.VehicleModel> vehicleModelsDB = dataSource.GetConnection().Table<Repository.VehicleModel>().Where(x=>x.MakeId==makeId).ToListAsync().Result;
-            List<VehicleModel> vehicleModels = new List<VehicleModel>();
-            foreach (Repository.VehicleModel item in vehicleModelsDB)
+            catch(Exception ex)
             {
-                vehicleModels.Add(mapper.Map<VehicleModel>(item));
+                throw new ServiceException();
             }
-            return vehicleModels;
         }
 
-        public List<VehicleModel> Paging(int indexOfPage, int pageSize)
+        public async Task<List<VehicleModel>> Filter(string filter)
         {
-            if (indexOfPage < 0 || pageSize <= 0 || indexOfPage > pageSize)
+            try
             {
-                return null;
-            }
-            else
-            {
-                string sqlQuery = "SELECT * FROM VehiclModel LIMIT ? OFFSET ?";
-                int limit = indexOfPage * pageSize;
-                object[] param = { limit, pageSize };
-                List<Repository.VehicleModel> vehicleModels = dataSource.GetConnection().QueryAsync<Repository.VehicleModel>(sqlQuery, param).Result;
+                List<VehicleModelEntity> vehicleModles = await dataSource.GetConnection().Table<VehicleModelEntity>().Where(
+                    x => x.Name.Contains(filter) || x.Abrv.Contains(filter)).ToListAsync();
                 List<VehicleModel> models = new List<VehicleModel>();
-                foreach (Repository.VehicleModel item in vehicleModels)
+                foreach (VehicleModelEntity item in vehicleModles)
                 {
                     models.Add(mapper.Map<VehicleModel>(item));
                 }
                 return models;
             }
+            catch(Exception ex)
+            {
+                throw new ServiceException();
+            }
         }
 
-        public List<VehicleModel> PagingByMake(int makeId, int indexOfPage, int pageSize)
+        public async Task<List<VehicleModel>> GetAll()
         {
-            if (indexOfPage < 0 || pageSize <= 0)
+            try
             {
-                return null;
+                List<VehicleModelEntity> vehicleModelsDB = await dataSource.GetConnection().Table<VehicleModelEntity>().ToListAsync();
+                List<VehicleModel> vehicleModels = new List<VehicleModel>();
+                foreach (VehicleModelEntity item in vehicleModelsDB)
+                {
+                    vehicleModels.Add(mapper.Map<VehicleModel>(item));
+                }
+                return vehicleModels;
+            }catch(Exception ex)
+            {
+                throw new ServiceException();
             }
-            else
+        }
+
+        public async Task<VehicleModel> GetById(int id)
+        {
+            try
             {
-                int offset = indexOfPage * pageSize;
-                string sqlQuery = "SELECT * FROM VehicleModel WHERE MakeId=? LIMIT ? OFFSET ?";
-                object[] param = { makeId, pageSize, offset };
-                List<Repository.VehicleModel> vehicleModels = dataSource.GetConnection().QueryAsync<Repository.VehicleModel>(sqlQuery,param).Result;
+                VehicleModelEntity vehicleModel = await dataSource.GetConnection().FindAsync<VehicleModelEntity>(x => x.Id == id);
+                return mapper.Map<VehicleModel>(vehicleModel);
+            }
+            catch(Exception ex)
+            {
+                throw new ServiceException();
+            }
+        }
+
+        public async Task<List<VehicleModel>> GetVehicleModelsByMakeId(int makeId)
+        {
+            try
+            {
+                List<VehicleModelEntity> vehicleModelsDB = await dataSource.GetConnection().Table<VehicleModelEntity>().Where(x => x.MakeId == makeId).ToListAsync();
+                List<VehicleModel> vehicleModels = new List<VehicleModel>();
+                foreach (VehicleModelEntity item in vehicleModelsDB)
+                {
+                    vehicleModels.Add(mapper.Map<VehicleModel>(item));
+                }
+                return vehicleModels;
+            }catch(Exception ex)
+            {
+                throw new ServiceException();
+            }
+        }
+
+        public async Task<List<VehicleModel>> Paging(int indexOfPage, int pageSize)
+        {
+            try
+            {
+                if (indexOfPage < 0 || pageSize <= 0 || indexOfPage > pageSize)
+                {
+                    return null;
+                }
+                else
+                {
+                    string sqlQuery = "SELECT * FROM VehiclModel LIMIT ? OFFSET ?";
+                    int limit = indexOfPage * pageSize;
+                    object[] param = { limit, pageSize };
+                    List<VehicleModelEntity> vehicleModels = await dataSource.GetConnection().QueryAsync<VehicleModelEntity>(sqlQuery, param);
+                    List<VehicleModel> models = new List<VehicleModel>();
+                    foreach (VehicleModelEntity item in vehicleModels)
+                    {
+                        models.Add(mapper.Map<VehicleModel>(item));
+                    }
+                    return models;
+                }
+            }catch(Exception ex)
+            {
+                throw new ServiceException();
+            }
+        }
+
+        public async Task<List<VehicleModel>> PagingByMake(int makeId, int indexOfPage, int pageSize)
+        {
+            try
+            {
+                if (indexOfPage < 0 || pageSize <= 0)
+                {
+                    return null;
+                }
+                else
+                {
+                    int offset = indexOfPage * pageSize;
+                    string sqlQuery = "SELECT * FROM VehicleModel WHERE MakeId=? LIMIT ? OFFSET ?";
+                    object[] param = { makeId, pageSize, offset };
+                    List<VehicleModelEntity> vehicleModels = await dataSource.GetConnection().QueryAsync<VehicleModelEntity>(sqlQuery, param);
+                    List<VehicleModel> models = new List<VehicleModel>();
+                    foreach (VehicleModelEntity item in vehicleModels)
+                    {
+                        models.Add(mapper.Map<VehicleModel>(item));
+                    }
+                    return models;
+                }
+            }catch(Exception ex)
+            {
+                throw new ServiceException();
+            }
+        }
+
+        public async Task<List<VehicleModel>> SortAsc()
+        {
+            try
+            {
+                List<VehicleModelEntity> vehicleModels = await dataSource.GetConnection().Table<VehicleModelEntity>().OrderBy(x => x.Name).ToListAsync();
                 List<VehicleModel> models = new List<VehicleModel>();
-                foreach (Repository.VehicleModel item in vehicleModels)
+                foreach (VehicleModelEntity item in vehicleModels)
                 {
                     models.Add(mapper.Map<VehicleModel>(item));
                 }
                 return models;
             }
-        }
-
-        public List<VehicleModel> SortAsc()
-        {
-            List<Repository.VehicleModel> vehicleModels = dataSource.GetConnection().Table<Repository.VehicleModel>().OrderBy(x => x.Name).ToListAsync().Result;
-            List<VehicleModel> models = new List<VehicleModel>();
-            foreach (Repository.VehicleModel item in vehicleModels)
+            catch(Exception ex)
             {
-                models.Add(mapper.Map<VehicleModel>(item));
+                throw new ServiceException();
             }
-            return models;
         }
 
-        public List<VehicleModel> SortDesc()
+        public async Task<List<VehicleModel>> SortDesc()
         {
-            List<Repository.VehicleModel> vehicleModels = dataSource.GetConnection().Table<Repository.VehicleModel>().OrderByDescending(x => x.Name).ToListAsync().Result;
-            List<VehicleModel> models = new List<VehicleModel>();
-            foreach (Repository.VehicleModel item in vehicleModels)
+            try
             {
-                models.Add(mapper.Map<VehicleModel>(item));
+                List<VehicleModelEntity> vehicleModels = await dataSource.GetConnection().Table<VehicleModelEntity>().OrderByDescending(x => x.Name).ToListAsync();
+                List<VehicleModel> models = new List<VehicleModel>();
+                foreach (VehicleModelEntity item in vehicleModels)
+                {
+                    models.Add(mapper.Map<VehicleModel>(item));
+                }
+                return models;
             }
-            return models;
+            catch(Exception ex)
+            {
+                throw new ServiceException();
+            }
 
         }
-        public int Update(VehicleModel entity)
+        public async Task<int> Update(VehicleModel entity)
         {
-            Repository.VehicleModel vehicleModle = mapper.Map<Repository.VehicleModel>(entity);
-            return dataSource.GetConnection().UpdateAsync(vehicleModle).Result;
+            try
+            {
+                VehicleModelEntity vehicleModle = mapper.Map<VehicleModelEntity>(entity);
+                return await dataSource.GetConnection().UpdateAsync(vehicleModle);
+            }
+            catch(Exception ex)
+            {
+                throw new ServiceException();
+            }
         }
     }
 }

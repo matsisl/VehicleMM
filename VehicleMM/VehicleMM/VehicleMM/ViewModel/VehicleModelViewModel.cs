@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using AutoMapper;
 using Service;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -100,74 +101,103 @@ namespace VehicleMM.ViewModel
         public Command NextCommand { get; }
         public Command PreviousCommand { get; }
 
-        private void GetVehicleModel()
+        private async void GetVehicleModel()
         {
-            
-            List<VehicleModel> models = vms.PagingByMake(vehicleMake.Id, pageIndex, pageSize);           
-            if (models==null)
-            {
-                pageIndex--;
-            }
-            else if (models.Count ==0)
-            {
-                pageIndex--;
-            }
-            else
-            {
-                VehicleModels.Clear();
-                List<VehicleModelModel> vehicleMakeModels = new List<VehicleModelModel>();
-                foreach (VehicleModel item in models)
+            try {
+                List<VehicleModel> models = await vms.PagingByMake(vehicleMake.Id, pageIndex, pageSize);
+                if (models == null)
                 {
-                    VehicleModels.Add(mapper.Map<VehicleModelModel>(item));
+                    pageIndex--;
+                }
+                else if (models.Count == 0)
+                {
+                    pageIndex--;
+                }
+                else
+                {
+                    VehicleModels.Clear();
+                    List<VehicleModelModel> vehicleMakeModels = new List<VehicleModelModel>();
+                    foreach (VehicleModel item in models)
+                    {
+                        VehicleModels.Add(mapper.Map<VehicleModelModel>(item));
+                    }
                 }
             }
+            catch (ServiceException ex)
+            {
+                DisplayAlert(ex.Message);
+            }
 
         }
 
-        private void CreateCommandFunction()
+        private async void CreateCommandFunction()
         {
-            int vehicleModelCreated = vms.Add(mapper.Map<VehicleModel>(vehicleModel));
-            if (vehicleModelCreated != 0)
+            try
             {
-                DisplayAlert("New vehicle make is created!");
-                ResetEnterData();
-                GetVehicleModel();
+                int vehicleModelCreated = await vms.Add(mapper.Map<VehicleModel>(vehicleModel));
+                if (vehicleModelCreated != 0)
+                {
+                    DisplayAlert("New vehicle make is created!");
+                    ResetEnterData();
+                    GetVehicleModel();
+                }
+                else
+                {
+                    DisplayAlert("Creating failed!");
+                }
             }
-            else
+            catch (ServiceException ex)
             {
-                DisplayAlert("Creating failed!");
+                DisplayAlert(ex.Message);
             }
+
         }
 
-        private void DeleteCommandFunction()
+        private async void DeleteCommandFunction()
         {
-            int vehicleModelDeleted = vms.Delete(mapper.Map<VehicleModel>(vehicleModel));
-            if (vehicleModelDeleted != 0)
+            try
             {
-                DisplayAlert("Vehicle make " + vehicleModel.Id + " is deleted!");
-                VehicleModels.Clear();
-                ResetEnterData();
-                GetVehicleModel();
+                int vehicleModelDeleted = await vms.Delete(mapper.Map<VehicleModel>(vehicleModel));
+                if (vehicleModelDeleted != 0)
+                {
+                    DisplayAlert("Vehicle make " + vehicleModel.Id + " is deleted!");
+                    VehicleModels.Clear();
+                    ResetEnterData();
+                    GetVehicleModel();
+                }
+                else
+                {
+                    DisplayAlert("Deleting failed!");
+                }
             }
-            else
+            catch (ServiceException ex)
             {
-                DisplayAlert("Deleting failed!");
+                DisplayAlert(ex.Message);
             }
+
         }
 
-        private void UpdateCommandFunction()
+        private async void UpdateCommandFunction()
         {
-            int vehickeModelUpdated = vms.Update(mapper.Map<VehicleModel>(vehicleModel));
-            if (vehickeModelUpdated != 0)
+            try
             {
-                DisplayAlert("Vehicle make " + vehicleModel.Id + " is updated!");
-                ResetEnterData();
-                GetVehicleModel();
+                int vehickeModelUpdated = await vms.Update(mapper.Map<VehicleModel>(vehicleModel));
+                if (vehickeModelUpdated != 0)
+                {
+                    DisplayAlert("Vehicle make " + vehicleModel.Id + " is updated!");
+                    ResetEnterData();
+                    GetVehicleModel();
+                }
+                else
+                {
+                    DisplayAlert("Updating failed!");
+                }
             }
-            else
+            catch (ServiceException ex)
             {
-                DisplayAlert("Updating failed!");
+                DisplayAlert(ex.Message);
             }
+
         }
 
         private void ResetEnterData()

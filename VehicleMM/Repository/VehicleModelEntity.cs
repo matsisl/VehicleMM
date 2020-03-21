@@ -6,7 +6,7 @@ using System.Text;
 namespace Repository
 {
     [Table("VehicleModel")]
-    public class VehicleModel
+    public class VehicleModelEntity
     {
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
