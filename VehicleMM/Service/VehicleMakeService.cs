@@ -13,10 +13,10 @@ namespace Service
         IDataSource dataSource;
         IMapper mapper;
 
-        public VehicleMakeService(IDataSource ds)
+        public VehicleMakeService(IDataSource ds, IMapper m)
         {
             dataSource = ds;
-            mapper = AutoMapperHelper.Maps();
+            mapper = m;
         }
 
         public async Task<int> Add(VehicleMake entity)

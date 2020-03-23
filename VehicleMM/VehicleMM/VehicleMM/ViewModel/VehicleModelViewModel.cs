@@ -20,10 +20,10 @@ namespace VehicleMM.ViewModel
         VehicleModelModel vehicleModel;
         int pageIndex;
         int pageSize;
-        public VehicleModelViewModel(VehicleMakeModel vehicleMakeModel, VehicleModelService vehicleModelService)
+        public VehicleModelViewModel(VehicleMakeModel vehicleMakeModel, VehicleModelService vehicleModelService, IMapper m)
         {
             vms = vehicleModelService;
-            mapper = AutoMapperHelper.Maps();
+            mapper = m;
             vehicleMake = vehicleMakeModel;
             vehicleModel = AutofacHelper.GetInstance().GetContainer().Resolve<VehicleModelModel>();
             vehicleModel.MakeId = vehicleMake.Id;

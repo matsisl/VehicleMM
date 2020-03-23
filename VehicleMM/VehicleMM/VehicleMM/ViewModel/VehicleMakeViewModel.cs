@@ -19,11 +19,11 @@ namespace VehicleMM.ViewModel
         IMapper mapper;
         VehicleMakeService vms;
         VehicleMakeModel vehicleMake;
-        public VehicleMakeViewModel(VehicleMakeService vehicleMakeService)
+        public VehicleMakeViewModel(VehicleMakeService vehicleMakeService, IMapper m)
         {
             vms = vehicleMakeService;
             vehicleMake = AutofacHelper.GetInstance().GetContainer().Resolve<VehicleMakeModel>();
-            mapper = AutoMapperHelper.Maps();
+            mapper = m;
             VehicleMakes = new ObservableCollection<VehicleMakeModel>();
             GetVehicleMake();
 

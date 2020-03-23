@@ -31,14 +31,14 @@ namespace VehicleMM.Utils
         private IContainer BuildContainer()
         {
             ContainerBuilder builder = new ContainerBuilder();
-            builder.RegisterType<VehicleMakeService>().SingleInstance();
-            builder.RegisterType<VehicleMakeViewModel>().SingleInstance();
+            builder.RegisterType<VehicleMakeService>().SingleInstance().WithParameter("m",AutoMapperHelper.GetInsance().GetMapper());
+            builder.RegisterType<VehicleMakeViewModel>().SingleInstance().WithParameter("m", AutoMapperHelper.GetInsance().GetMapper());
             builder.RegisterType<VehicleMakeView>().SingleInstance();
             builder.RegisterType<VehicleMakeModel>().InstancePerDependency();
 
-            builder.RegisterType<VehicleModelService>().SingleInstance();
+            builder.RegisterType<VehicleModelService>().SingleInstance().WithParameter("m", AutoMapperHelper.GetInsance().GetMapper());
             builder.RegisterType<VehicleModelView>();
-            builder.RegisterType<VehicleModelViewModel>();
+            builder.RegisterType<VehicleModelViewModel>().WithParameter("m", AutoMapperHelper.GetInsance().GetMapper());
             builder.RegisterType<VehicleModelModel>().InstancePerDependency();
 
             builder.RegisterModule<ServiceAutofacModule>();

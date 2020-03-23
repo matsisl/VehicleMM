@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Repository;
 using Service;
 using System;
 using System.Collections.Generic;
@@ -9,13 +10,34 @@ namespace VehicleMM.Utils
 {
     public class AutoMapperHelper
     {
-        internal static IMapper Maps()
+        IMapper mapper;
+        static AutoMapperHelper Instance;
+        private AutoMapperHelper()
+        {
+            CreteMaps();
+        }
+
+        public static AutoMapperHelper GetInsance()
+        {
+            if (Instance == null)
+            {
+                Instance = new AutoMapperHelper();
+            }
+            return Instance;
+        }
+        private void CreteMaps()
         {
             MapperConfiguration mapperConfiguration = new MapperConfiguration(
-                conf => { conf.CreateMap<VehicleMake, VehicleMakeModel>().ReverseMap();
-                    conf.CreateMap<VehicleModel, VehicleModelModel>().ReverseMap();
+                conf => {
+                    conf.AddProfile(new ServiceAutoMapperProfile());
+                    conf.AddProfile(new AutoMapperProfile());
                 });
-            return mapperConfiguration.CreateMapper();
+            mapper = mapperConfiguration.CreateMapper();
+        }
+
+        public IMapper GetMapper()
+        {
+            return mapper;
         }
     }
 }
