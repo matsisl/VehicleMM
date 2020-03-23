@@ -2,11 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="VehicleMM.View.VehicleMakeView"
-             xmlns:local="clr-namespace:VehicleMM.ViewModel"
              BackgroundColor="{StaticResource ViewBackgroundColor}">
-    <ContentPage.BindingContext>
-        <local:VehicleMakeViewModel/>
-    </ContentPage.BindingContext>
     <Grid Margin="5,5">
         <Grid.RowDefinitions>
             <RowDefinition Height="20"/>

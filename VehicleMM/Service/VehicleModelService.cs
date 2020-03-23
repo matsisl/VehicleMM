@@ -12,10 +12,9 @@ namespace Service
     {
         IDataSource dataSource;
         IMapper mapper;
-        public VehicleModelService()
+        public VehicleModelService(IDataSource ds)
         {
-            IContainer container = AutofacContainer.Build();
-            dataSource = container.Resolve<DataSource>();
+            dataSource = ds;
             mapper = AutoMapperHelper.Maps();
         }
 

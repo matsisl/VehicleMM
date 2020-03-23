@@ -14,21 +14,19 @@ namespace VehicleMM.ViewModel
     public class VehicleModelViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        Autofac.IContainer container;
         IMapper mapper;
         VehicleModelService vms;
         public VehicleMakeModel vehicleMake;
         VehicleModelModel vehicleModel;
         int pageIndex;
         int pageSize;
-        public VehicleModelViewModel(VehicleMakeModel vehicleMakeModel)
+        public VehicleModelViewModel(VehicleMakeModel vehicleMakeModel, VehicleModelService vehicleModelService)
         {
+            vms = vehicleModelService;
             mapper = AutoMapperHelper.Maps();
             vehicleMake = vehicleMakeModel;
-            vehicleModel = new VehicleModelModel();
+            vehicleModel = AutofacHelper.GetInstance().GetContainer().Resolve<VehicleModelModel>();
             vehicleModel.MakeId = vehicleMake.Id;
-            container = AutofacHelper.Build();
-            vms = container.ResolveNamed<VehicleModelService>("ModelService");
             VehicleModels = new ObservableCollection<VehicleModelModel>();
             pageIndex = 0;
             pageSize = 4;

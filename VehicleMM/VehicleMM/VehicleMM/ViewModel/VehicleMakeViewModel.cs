@@ -16,16 +16,14 @@ namespace VehicleMM.ViewModel
     public class VehicleMakeViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        Autofac.IContainer container;
         IMapper mapper;
         VehicleMakeService vms;
         VehicleMakeModel vehicleMake;
-        public VehicleMakeViewModel()
+        public VehicleMakeViewModel(VehicleMakeService vehicleMakeService)
         {
-            vehicleMake = new VehicleMakeModel();
+            vms = vehicleMakeService;
+            vehicleMake = AutofacHelper.GetInstance().GetContainer().Resolve<VehicleMakeModel>();
             mapper = AutoMapperHelper.Maps();
-            container = AutofacHelper.Build();
-            vms = container.ResolveNamed<VehicleMakeService>("MakeService");
             VehicleMakes = new ObservableCollection<VehicleMakeModel>();
             GetVehicleMake();
 
@@ -197,21 +195,12 @@ namespace VehicleMM.ViewModel
 
         private async void SeletedMakeCommandFunction()
         {
-            try
-            {
-                if (!(SelectedVehicleMake is null))
-                {
-                    var vehicleModelViewModel = new VehicleModelViewModel(SelectedVehicleMake);
-                    await Application.Current.MainPage.Navigation.PushAsync(new VehicleModelView(vehicleModelViewModel));
-                    SelectedVehicleMake = null;
-                }
-            }
-            catch (ServiceException ex)
-            {
-                DisplayAlert(ex.Message);
-            }
-
-
+            if (!(SelectedVehicleMake is null)){
+                var vmvm = AutofacHelper.GetInstance().GetContainer().Resolve<VehicleModelViewModel>(new NamedParameter("vehicleMakeModel", SelectedVehicleMake));
+                var vmv = AutofacHelper.GetInstance().GetContainer().Resolve<VehicleModelView>(new NamedParameter("vehicleModelViewModel", vmvm));
+                await Application.Current.MainPage.Navigation.PushAsync(vmv);
+                SelectedVehicleMake = null;
+            }           
         }
 
         private async void SearchFunction()

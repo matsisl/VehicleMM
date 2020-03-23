@@ -13,10 +13,9 @@ namespace Service
         IDataSource dataSource;
         IMapper mapper;
 
-        public VehicleMakeService()
+        public VehicleMakeService(IDataSource ds)
         {
-            IContainer container = AutofacContainer.Build();
-            dataSource = container.Resolve<DataSource>();
+            dataSource = ds;
             mapper = AutoMapperHelper.Maps();
         }
 

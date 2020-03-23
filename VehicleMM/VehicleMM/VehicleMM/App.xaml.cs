@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Autofac;
+using System;
+using VehicleMM.Utils;
 using VehicleMM.View;
 using Xamarin.Forms;
 using Xamarin.Forms.PlatformConfiguration;
@@ -12,9 +14,12 @@ namespace VehicleMM
         public App()
         {
             InitializeComponent();
-
-            var navigationPage = new NavigationPage(new VehicleMakeView());
-            MainPage = navigationPage;
+            using (var scope = AutofacHelper.GetInstance().GetContainer().BeginLifetimeScope())
+            {
+                var vmv = scope.Resolve<VehicleMakeView>();
+                var navigationPage = new NavigationPage(vmv);
+                MainPage = navigationPage;
+            }
         }
 
         protected override void OnStart()

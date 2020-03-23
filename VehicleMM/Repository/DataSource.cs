@@ -41,21 +41,21 @@ namespace Repository
             int idVW=0, idBMW=0, idOpel=0;
             if (connection.Table<VehicleMakeEntity>().CountAsync().Result == 0)
             {
-                idVW = connection.InsertAsync(new VehicleMakeEntity(){ Name="Volkswagen", Abrv="VW" }).Result;
+                idVW =  connection.InsertAsync(new VehicleMakeEntity(){ Name="Volkswagen", Abrv="VW" }).Result;
                 idOpel = connection.InsertAsync(new VehicleMakeEntity() { Name="Opel", Abrv="Opel" }).Result;
-                idBMW = connection.InsertAsync(new VehicleMakeEntity() { Name ="Bayerische Motoren Werke", Abrv="BMW" }).Result;
+                idBMW =  connection.InsertAsync(new VehicleMakeEntity() { Name ="Bayerische Motoren Werke", Abrv="BMW" }).Result;
             }
             if (connection.Table<VehicleModelEntity>().CountAsync().Result == 0)
             {
-                connection.InsertAsync(new VehicleModelEntity() {MakeId=idVW, Name="Bettle 2.0 Cabriolet", Abrv="Bettle" });
-                connection.InsertAsync(new VehicleModelEntity() { MakeId = idVW, Name = "Passat 2.0 Sedan", Abrv = "Passat" });
-                connection.InsertAsync(new VehicleModelEntity() { MakeId = idVW, Name = "Tiguan S", Abrv = "Tiguan" });
-                connection.InsertAsync(new VehicleModelEntity() { MakeId =idOpel, Name = "Astra 2.0 TurboSport", Abrv = "Astra" });
-                connection.InsertAsync(new VehicleModelEntity() { MakeId = idOpel, Name = "Corsa LiteSport", Abrv = "Corsa" });
-                connection.InsertAsync(new VehicleModelEntity() { MakeId = idOpel, Name = "Insignia 2.0 CDTi AWD", Abrv = "Insignia" });
-                connection.InsertAsync(new VehicleModelEntity() { MakeId = idBMW, Name = "330d", Abrv = "330" });
-                connection.InsertAsync(new VehicleModelEntity() { MakeId = idBMW, Name = "320i 4dr Sedan", Abrv = "320" });
-                connection.InsertAsync(new VehicleModelEntity() { MakeId = idBMW, Name = "X5 sDrive35i 4dr SUV ", Abrv = "X5" });
+                connection.InsertAsync(new VehicleModelEntity() {MakeId=1, Name="Bettle 2.0 Cabriolet", Abrv="Bettle" });
+                connection.InsertAsync(new VehicleModelEntity() { MakeId = 1, Name = "Passat 2.0 Sedan", Abrv = "Passat" });
+                connection.InsertAsync(new VehicleModelEntity() { MakeId = 1, Name = "Tiguan S", Abrv = "Tiguan" });
+                connection.InsertAsync(new VehicleModelEntity() { MakeId =2, Name = "Astra 2.0 TurboSport", Abrv = "Astra" });
+                connection.InsertAsync(new VehicleModelEntity() { MakeId = 2, Name = "Corsa LiteSport", Abrv = "Corsa" });
+                connection.InsertAsync(new VehicleModelEntity() { MakeId = 2, Name = "Insignia 2.0 CDTi AWD", Abrv = "Insignia" });
+                connection.InsertAsync(new VehicleModelEntity() { MakeId = 3, Name = "330d", Abrv = "330" });
+                connection.InsertAsync(new VehicleModelEntity() { MakeId = 3, Name = "320i 4dr Sedan", Abrv = "320" });
+                connection.InsertAsync(new VehicleModelEntity() { MakeId = 3, Name = "X5 sDrive35i 4dr SUV ", Abrv = "X5" });
 
             }
         }
