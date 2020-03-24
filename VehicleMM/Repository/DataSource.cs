@@ -33,8 +33,8 @@ namespace Repository
 
         private void createTableInDB()
         {
-            connection.CreateTableAsync<VehicleMakeEntity>();
-            connection.CreateTableAsync<VehicleModelEntity>();
+            connection.CreateTableAsync<VehicleMakeEntity>().Wait();
+            connection.CreateTableAsync<VehicleModelEntity>().Wait();
         }
         private void createMockDataInDB()
         {
